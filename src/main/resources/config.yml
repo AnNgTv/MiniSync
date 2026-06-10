@@ -1,0 +1,22 @@
+# Cấu hình Database
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "minisync"
+  username: "user"
+  password: "password"
+
+# Cấu hình Discord Bot
+discord:
+  token: "YOUR_DISCORD_BOT_TOKEN"
+  guild_id: "YOUR_GUILD_ID"
+  sync_channel_id: "YOUR_CHANNEL_ID"
+
+# Cấu hình tin nhắn
+messages:
+  prefix: "§b[MiniSync] "
+  invalid_code: "§cMã không hợp lệ hoặc đã hết hạn!"
+  sync_success: "§aLiên kết Discord thành công với ID: %discord_id%"
+  already_synced: "§cTài khoản này đã được liên kết!"
+  unsync_success: "§eĐã hủy liên kết Discord!"
+  not_synced: "§cBạn chưa liên kết tài khoản!"

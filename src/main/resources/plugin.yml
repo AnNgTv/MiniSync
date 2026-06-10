@@ -1,0 +1,15 @@
+name: MiniSync
+version: 1.0
+main: me.yourname.minisync.MiniSync
+api-version: 1.20
+commands:
+  sync:
+    description: Liên kết tài khoản Discord
+    usage: /sync <code>
+  unsync:
+    description: Hủy liên kết tài khoản Discord
+    usage: /unsync
+permissions:
+  minisync.use:
+    description: Cho phép sử dụng lệnh sync/unsync
+    default: true
