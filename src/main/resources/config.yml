@@ -1,22 +1,26 @@
-# Cấu hình Database
+# MiniSync 2.0 - NIGHTMARE TCYT
+# Không chia sẻ Discord bot token hoặc thông tin MySQL.
+
 mysql:
   host: "localhost"
   port: 3306
   database: "minisync"
   username: "user"
-  password: "password"
+  password: "CHANGE_ME"
 
-# Cấu hình Discord Bot
 discord:
   token: "YOUR_DISCORD_BOT_TOKEN"
-  guild_id: "YOUR_GUILD_ID"
-  sync_channel_id: "YOUR_CHANNEL_ID"
 
-# Cấu hình tin nhắn
+sync:
+  code-expiry-minutes: 10
+
 messages:
   prefix: "§b[MiniSync] "
-  invalid_code: "§cMã không hợp lệ hoặc đã hết hạn!"
-  sync_success: "§aLiên kết Discord thành công với ID: %discord_id%"
-  already_synced: "§cTài khoản này đã được liên kết!"
+  processing: "§eĐang xác minh mã..."
+  invalid_code: "§cMã không hợp lệ, đã được sử dụng hoặc đã hết hạn!"
+  sync_success: "§aLiên kết Discord thành công!"
+  discord_already_linked: "§cTài khoản Discord này đã được liên kết với Minecraft khác!"
   unsync_success: "§eĐã hủy liên kết Discord!"
-  not_synced: "§cBạn chưa liên kết tài khoản!"
+  not_synced: "§cBạn chưa liên kết tài khoản Discord!"
+  no_permission: "§cBạn không có quyền sử dụng lệnh này!"
+  database_error: "§cDatabase đang gặp sự cố. Vui lòng thử lại sau."

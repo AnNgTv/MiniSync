@@ -1,14 +1,19 @@
 name: MiniSync
-version: 1.1.0
+version: 2.0.0
 main: me.yourname.minisync.MiniSync
+api-version: '1.20'
+description: Discord-Minecraft account linking for NIGHTMARE TCYT
+authors: [AnNgTv]
 commands:
   sync:
-    description: Liên kết tài khoản Discord
+    description: Liên kết tài khoản Discord với Minecraft
     usage: /sync <code>
+    permission: minisync.use
   unsync:
-    description: Hủy liên kết tài khoản Discord
+    description: Hủy liên kết Discord với Minecraft
     usage: /unsync
+    permission: minisync.use
 permissions:
   minisync.use:
-    description: Cho phép sử dụng lệnh sync/unsync
+    description: Cho phép liên kết hoặc hủy liên kết tài khoản
     default: true

@@ -6,50 +6,53 @@ import me.yourname.minisync.database.MySQL;
 import me.yourname.minisync.discord.DiscordManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class MiniSync extends JavaPlugin {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
+public final class MiniSync extends JavaPlugin {
     private static MiniSync instance;
     private MySQL mysql;
     private DiscordManager discordManager;
+    private ExecutorService executor;
 
     @Override
     public void onEnable() {
         instance = this;
-
-        // Load Config
         saveDefaultConfig();
 
-        // Setup Database
+        ThreadFactory factory = runnable -> {
+            Thread thread = new Thread(runnable, "MiniSync-Worker");
+            thread.setDaemon(true);
+            return thread;
+        };
+        executor = Executors.newFixedThreadPool(3, factory);
         mysql = new MySQL(this);
-        mysql.connect();
-
-        // Setup Discord Bot
         discordManager = new DiscordManager(this);
-        discordManager.start();
 
-        // Register Commands
-        getCommand("sync").setExecutor(new SyncCommand(this));
-        getCommand("unsync").setExecutor(new UnsyncCommand(this));
+        if (getCommand("sync") != null) getCommand("sync").setExecutor(new SyncCommand(this));
+        if (getCommand("unsync") != null) getCommand("unsync").setExecutor(new UnsyncCommand(this));
 
-        getLogger().info("MiniSync đã được kích hoạt!");
+        // Never block the Minecraft main thread while connecting to MySQL or Discord.
+        executor.execute(() -> {
+            mysql.connect();
+            if (mysql.isConnected()) discordManager.start();
+            else getLogger().severe("Discord Bot không khởi động vì MySQL chưa kết nối.");
+        });
+        getLogger().info("MiniSync 2.0 đang khởi động...");
     }
 
     @Override
     public void onDisable() {
-        if (mysql != null) mysql.disconnect();
         if (discordManager != null) discordManager.stop();
-        getLogger().info("MiniSync đã bị vô hiệu hóa!");
+        if (mysql != null) mysql.disconnect();
+        if (executor != null) executor.shutdownNow();
+        instance = null;
+        getLogger().info("MiniSync đã tắt.");
     }
 
-    public static MiniSync getInstance() {
-        return instance;
-    }
-
-    public MySQL getMySQL() {
-        return mysql;
-    }
-
-    public DiscordManager getDiscordManager() {
-        return discordManager;
-    }
+    public static MiniSync getInstance() { return instance; }
+    public MySQL getMySQL() { return mysql; }
+    public DiscordManager getDiscordManager() { return discordManager; }
+    public ExecutorService getExecutor() { return executor; }
 }

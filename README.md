@@ -1,42 +1,53 @@
-# MiniSync 🔗
+# MiniSync 2.0 🔗
 
-**MiniSync** là một plugin Minecraft (Spigot/Bukkit) mạnh mẽ giúp liên kết tài khoản Minecraft của người chơi với tài khoản Discord của họ một cách đơn giản và an toàn.
+Plugin liên kết tài khoản Minecraft với Discord dành cho Paper 1.20.6 và NIGHTMARE TCYT.
 
-## ✨ Tính năng
+## Tính năng
+- Discord slash command `/sync` tạo mã liên kết riêng tư.
+- Minecraft `/sync <code>` xác minh và liên kết UUID với Discord ID.
+- Minecraft `/unsync` hủy liên kết.
+- Mã xác minh hết hạn tự động (mặc định 10 phút), chỉ dùng một lần.
+- Mỗi Discord ID chỉ được liên kết với một UUID.
+- MySQL connection pool bằng HikariCP.
+- Tác vụ database và khởi động Discord chạy ngoài luồng chính Minecraft.
+- Tự tạo bảng và nâng cấp schema từ MiniSync 1.x mà không xóa dữ liệu liên kết.
 
-- **Liên kết dễ dàng**: Sử dụng mã (code) để xác thực giữa Discord và Minecraft.
-- **Slash Commands**: Sử dụng `/sync` trực tiếp trên Discord (JDA 5).
-- **Cơ sở dữ liệu MySQL**: Lưu trữ dữ liệu liên kết một cách bền vững.
-- **Tự động tạo bảng**: Không cần phải nhập thủ công file SQL.
-- **Tùy chỉnh linh hoạt**: Chỉnh sửa mọi thông tin qua `config.yml`.
-- **Hỗ trợ Maven**: Dễ dàng biên dịch và đóng gói với đầy đủ thư viện.
+## Yêu cầu
+- Paper 1.20.6
+- Java 21
+- MySQL 8.x (hoặc dịch vụ tương thích MySQL)
+- Discord bot token và quyền sử dụng application/slash commands
 
-## 🛠️ Cài đặt
+## Cài đặt
+1. Tải `MiniSync-2.0.0.jar` từ GitHub Releases.
+2. Đặt JAR vào thư mục `plugins` của server.
+3. Khởi động server một lần để tạo `plugins/MiniSync/config.yml`.
+4. Điền thông tin MySQL và Discord bot token.
+5. Khởi động lại server. Kiểm tra log có thông báo MySQL và Discord kết nối thành công.
 
-1. Tải plugin về và bỏ vào thư mục `plugins` của server.
-2. Khởi động server để tạo tệp cấu hình.
-3. Mở `plugins/MiniSync/config.yml`:
-   - Điền thông tin kết nối **MySQL**.
-   - Điền **Discord Bot Token**.
-4. Khởi động lại server hoặc tải lại plugin.
+**Không gửi Discord token, mật khẩu database hoặc file config có thông tin bí mật cho người khác.**
 
-## 🎮 Cách sử dụng
+## Sử dụng
+1. Trên Discord, chạy slash command `/sync`.
+2. Bot trả mã riêng tư; nhập mã đó trong Minecraft bằng `/sync <code>`.
+3. Để hủy liên kết, chạy `/unsync` trong Minecraft.
 
-1. **Trên Discord**: Gõ lệnh `/sync`. Bot sẽ gửi cho bạn một mã (ví dụ: `A1B2C3`).
-2. **Trong Minecraft**: Gõ lệnh `/sync A1B2C3`.
-3. Hệ thống sẽ xác nhận liên kết thành công!
-4. Để hủy liên kết, dùng lệnh `/unsync` trong game.
+## Cấu hình
+- `sync.code-expiry-minutes`: thời hạn mã xác minh, mặc định 10 phút.
+- `mysql.*`: thông tin kết nối MySQL.
+- `discord.token`: token bot Discord.
 
-## 🏗️ Biên dịch (Build)
-
-Dự án sử dụng Maven. Để biên dịch:
+## Build
+Cần JDK 21 và Maven:
 
 ```bash
 mvn clean package
 ```
 
-File `.jar` sẽ nằm trong thư mục `target/`.
+JAR đã đóng gói thư viện nằm tại `target/MiniSync-2.0.0.jar`.
 
-## 📄 Giấy phép
+## Lưu ý database
+MiniSync 2.0 giữ lại bảng liên kết `minisync`. Bảng mã `minisync_codes` được bổ sung cột hết hạn; các mã cũ không có thời hạn sẽ bị xóa khi nâng cấp. Hãy sao lưu database trước khi cập nhật plugin.
 
-Dự án này được phát hành dưới bản quyền MIT.
+## License
+MIT
